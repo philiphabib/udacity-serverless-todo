@@ -1,7 +1,6 @@
-# TODO: Change the name of the org 
 org: philiphabib1
-app: serverless-todo-app3
-service: serverless-todo-app3
+app: serverless-capstone-app4
+service: serverless-capstone-app4
 
 plugins:
   - serverless-webpack
@@ -23,9 +22,9 @@ provider:
   # Use these variables in the functions and resouorces section below. For example, 
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
+    TODOS_TABLE: Capstone-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-${self:provider.stage}
+    ATTACHMENT_S3_BUCKET: serverless-capstone-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AUTH_O_SECRET: 2FhObjFQLVHKI3t9G9RrtbgFf18DnpLlxs_URt8ieQXFSTt2pZZFscLPLR2TatQb
     AUTH_0_JWKS_URL: https://dev-fdd0upkj.us.auth0.com/.well-known/jwks.json
@@ -48,8 +47,7 @@ functions:
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
     
-  # TODO: Configure this function - 
-  # Provide iamRoleStatements property for performing Actions on DynamoDB
+    
   GetTodos:
     handler: src/lambda/http/getTodos.handler
     events:
@@ -72,11 +70,27 @@ functions:
           - s3:GetObject
           - s3:PutObject
         Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/* 
+      - Effect: Allow
+        Action:
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+          - xray:BatchGetTraces
+          - xray:GetServiceGraph
+          - xray:GetTraceGraph
+          - xray:GetTraceSummaries
+          - xray:GetGroups
+          - xray:GetGroup
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"  
          
-  # TODO: Configure this function - 
-  # Provide iamRoleStatements property. Decide the Actions and AWS Resource. 
-  # To refer to an AWS resource defined in the "Resources" section, you can use "Resource: !GetAtt <resource-name>.Arn"
-  # To validate incoming HTTP requests, we have provided the request schemas in function definition below. 
+  
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
@@ -102,10 +116,28 @@ functions:
         Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*            
+        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/* 
+      - Effect: Allow
+        Action:
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+          - xray:BatchGetTraces
+          - xray:GetServiceGraph
+          - xray:GetTraceGraph
+          - xray:GetTraceSummaries
+          - xray:GetGroups
+          - xray:GetGroup
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+          - events:PutRule
+        Resource: "*"              
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements, and request schemas
   UpdateTodo:
     handler: src/lambda/http/updateTodo.handler
     events:
@@ -132,11 +164,28 @@ functions:
         Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*  
+        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+          - xray:BatchGetTraces
+          - xray:GetServiceGraph
+          - xray:GetTraceGraph
+          - xray:GetTraceSummaries
+          - xray:GetGroups
+          - xray:GetGroup
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"    
         
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
   DeleteTodo:
     handler: src/lambda/http/deleteTodo.handler
     events:
@@ -159,10 +208,28 @@ functions:
         Action:
           - s3:GetObject
           - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*      
+        Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+          - xray:BatchGetTraces
+          - xray:GetServiceGraph
+          - xray:GetTraceGraph
+          - xray:GetTraceSummaries
+          - xray:GetGroups
+          - xray:GetGroup
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"        
 
-  # TODO: Configure this function
-  # Provide property for setting up CORS, Authorizer, iamRoleStatements
+ 
   GenerateUploadUrl:
     handler: src/lambda/http/generateUploadUrl.handler
     events:
@@ -186,6 +253,25 @@ functions:
           - s3:GetObject
           - s3:PutObject
         Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - xray:GetSamplingRules
+          - xray:GetSamplingTargets
+          - xray:GetSamplingStatisticSummaries
+          - xray:BatchGetTraces
+          - xray:GetServiceGraph
+          - xray:GetTraceGraph
+          - xray:GetTraceSummaries
+          - xray:GetGroups
+          - xray:GetGroup
+          - xray:PutTraceSegments
+        Resource: "*"
+      - Effect: Allow
+        Action:
+          - logs:CreateLogStream
+          - logs:CreateLogGroup
+          - logs:PutLogEvents
+        Resource: "*"  
  
 resources:
   Resources:
@@ -200,7 +286,6 @@ resources:
         RestApiId:
           Ref: ApiGatewayRestApi   
     
-    # TODO: Create a DynamoDB table with local secondary index and a composite key
     TodosTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -228,8 +313,7 @@ resources:
             Projection:
               ProjectionType: ALL
 
-    # TODO: Complete the bucket properties below. 
-    # Do not forget to add the CorsConfiguration propoerty
+
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
@@ -248,8 +332,7 @@ resources:
                 - HEAD
               MaxAge: 3000
 
-    # TODO: Complete the policy below and attach it to the bucket defined above
-    # For cross referencing the name of the bucket, use "!Ref AttachmentsBucket"
+
     BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -265,3 +348,5 @@ resources:
                 - s3:PutObject
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket
+
+        
